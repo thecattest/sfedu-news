@@ -8,7 +8,7 @@ from parser import get_news_text
 
 try:
     with open('tg_config') as f:
-        TOKEN = f.readline()
+        TOKEN = f.readline().strip()
 except FileNotFoundError:
     raise FileNotFoundError('Telegram config file not found')
 
@@ -18,7 +18,7 @@ def get_news(ind):
     text, images = get_news_text(ind)
 
     try:
-        with open('last_sent.txt') as f:
+        with open('last_sent.txt', encoding='utf-8') as f:
             last_sent = f.read()
         if last_sent == text + '\n'.join(images):
             bot.send_message(THECATTEST, "nothing new")
@@ -38,7 +38,7 @@ def get_news(ind):
     else:
         bot.send_message(CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
-    with open('last_sent.txt', 'wt') as f:
+    with open('last_sent.txt', 'wt', encoding='utf-8') as f:
         f.write(text + '\n'.join(images))
 
 
@@ -47,5 +47,4 @@ THECATTEST = 888848705
 
 bot = Bot(TOKEN)
 logger = get_logger('bot', 'mmcs_news_bot')
-
 get_news(1)
