@@ -3,5 +3,5 @@
 /tg_config
 .idea/
 /__pycache__
-mmcs_news_bot
-mmcs_news_parser
+/parser
+/bot
