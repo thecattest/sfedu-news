@@ -48,4 +48,4 @@ THECATTEST = 888848705
 bot = Bot(TOKEN)
 logger = get_logger('bot', 'mmcs_news_bot')
 
-get_news(2)
+get_news(1)
