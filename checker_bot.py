@@ -35,6 +35,7 @@ def get_news(ind):
     elif len(images) > 1:
         media = [InputMediaPhoto(url) for url in images[:10]]
         bot.send_media_group(CHANNEL, media)
+        bot.send_message(CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     else:
         bot.send_message(CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
