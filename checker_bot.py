@@ -2,9 +2,6 @@ from telegram import Bot
 from telegram import ParseMode, InputMediaPhoto
 from telegram.error import BadRequest
 
-from get_logger import get_logger
-from parser import get_news_text
-
 
 try:
     with open('tg_config') as f:
