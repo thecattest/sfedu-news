@@ -11,6 +11,8 @@ from telegram.error import BadRequest
 
 from db_init import db_session, Post
 
+from time import sleep
+
 
 try:
     with open('tg_config') as f:
@@ -18,7 +20,7 @@ try:
 except FileNotFoundError:
     raise FileNotFoundError('Telegram config file not found')
 
-# CHANNEL = -1001754457370
+CHANNEL = -1001754457370
 TEST_CHANNEL = -1001885344884
 THECATTEST = 888848705
 bot = Bot(TOKEN)
@@ -48,36 +50,38 @@ def refresh():
             post.message_id = message.message_id
             db.add(post)
             db.commit()
+        sleep(3)
     db.close()
+    bot.send_message(THECATTEST, 'checked')
 
 
 def send_post(post, images):
     text = post.get_text()
     if len(images) == 1:
         try:
-            return bot.send_photo(TEST_CHANNEL, images[0], text, parse_mode=ParseMode.HTML)
+            return bot.send_photo(CHANNEL, images[0], text, parse_mode=ParseMode.HTML)
         except BadRequest:
-            bot.send_photo(TEST_CHANNEL, images[0])
-            return bot.send_message(TEST_CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+            bot.send_photo(CHANNEL, images[0])
+            return bot.send_message(CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     elif len(images) > 1:
         media = [InputMediaPhoto(url) for url in images[:10]]
-        bot.send_media_group(TEST_CHANNEL, media)
-        return bot.send_message(TEST_CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        bot.send_media_group(CHANNEL, media)
+        return bot.send_message(CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     else:
-        return bot.send_message(TEST_CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        return bot.send_message(CHANNEL, text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
 def edit_post(post, images):
     if len(images) == 1:
-        bot.edit_message_caption(chat_id=TEST_CHANNEL, message_id=post.message_id,
+        bot.edit_message_caption(chat_id=CHANNEL, message_id=post.message_id,
                                  caption=post.get_text(), parse_mode=ParseMode.HTML)
     else:
-        bot.edit_message_text(chat_id=TEST_CHANNEL, message_id=post.message_id,
+        bot.edit_message_text(chat_id=CHANNEL, message_id=post.message_id,
                               text=post.get_text(), parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
 def delete_post(post):
-    bot.delete_message(TEST_CHANNEL, message_id=post.message_id)
+    bot.delete_message(CHANNEL, message_id=post.message_id)
 
 
 def get_post(item):
