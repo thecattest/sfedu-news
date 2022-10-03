@@ -20,8 +20,11 @@ try:
 except FileNotFoundError:
     raise FileNotFoundError('Telegram config file not found')
 
-CHANNEL = -1001754457370
+MAIN_CHANNEL = -1001754457370
 TEST_CHANNEL = -1001885344884
+M_CHANNEL = -1001154887433
+
+CHANNEL = M_CHANNEL
 THECATTEST = 888848705
 bot = Bot(TOKEN)
 
@@ -73,10 +76,10 @@ def send_post(post, images):
 
 def edit_post(post, images):
     if len(images) == 1:
-        bot.edit_message_caption(chat_id=CHANNEL, message_id=post.message_id,
+        bot.edit_message_caption(chat_id=M_CHANNEL, message_id=post.message_id,
                                  caption=post.get_text(), parse_mode=ParseMode.HTML)
     else:
-        bot.edit_message_text(chat_id=CHANNEL, message_id=post.message_id,
+        bot.edit_message_text(chat_id=M_CHANNEL, message_id=post.message_id,
                               text=post.get_text(), parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
