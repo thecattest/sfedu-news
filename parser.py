@@ -29,7 +29,7 @@ def process_tag(tag):
             style = tag.attrs.get('style').strip().split(';')
             style = [list(map(lambda x: x.strip(), pair.split(':'))) for pair in style if pair]
             if style not in ([['text-decoration', 'underline']], [['text-align', 'justify']]):
-                print('unusual style ' + str(style) + ' ' + str(tag))
+                pass # rint('unusual style ' + str(style) + ' ' + str(tag))
             for key, value in style:
                 if key == 'text-decoration':
                     if value == 'underline':
