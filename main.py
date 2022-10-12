@@ -13,8 +13,6 @@ from db_init import db_session, Post
 
 from time import sleep
 
-from re import search
-
 
 try:
     with open('tg_config') as f:
