@@ -2,6 +2,8 @@ import sqlalchemy
 from data.db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
 
+from re import search
+
 
 def bold(text):
     return '<b>{}</b>'.format(text.strip())
@@ -41,6 +43,10 @@ class Post(SqlAlchemyBase, SerializerMixin):
         author = code(self.author)
         text = '\n'.join([title, date_string, author, '\n' + self.text])
         return text
+
+    @staticmethod
+    def shorten_link(link):
+        return search(r'.+-news/(.+/)?\d+', link).group()
 
     def __repr__(self):
         return f"<Post {self.id} {self.title} >"

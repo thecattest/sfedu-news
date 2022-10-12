@@ -1,4 +1,4 @@
-from parser import find_process_tags, BASE_URL, bold, code, link
+from parser import find_process_tags, BASE_URL
 
 from bs4 import BeautifulSoup
 from feedparser import parse
@@ -12,6 +12,8 @@ from telegram.error import BadRequest
 from db_init import db_session, Post
 
 from time import sleep
+
+from re import search
 
 
 try:
@@ -35,11 +37,12 @@ def refresh():
     db = db_session.create_session()
     for item in reversed(feed.entries):
         post, images = get_post(item)
-        db_post = db.query(Post).filter(Post.title == post.title).first()
+        db_post = db.query(Post).filter(Post.link == post.link).first()
         if db_post:
             keys = ('title', 'text', 'datetime')
             if db_post.to_dict(only=keys) != post.to_dict(keys):
-                print("delete and post")
+                print('delete and post')
+                bot.send_message(THECATTEST, 'delete and post')
                 delete_post(db_post)
                 db.delete(db_post)
                 db.commit()
@@ -48,12 +51,13 @@ def refresh():
                 db.add(post)
                 db.commit()
         else:
-            print("new")
+            print('new')
+            bot.send_message(THECATTEST, 'new')
             message = send_post(post, images)
             post.message_id = message.message_id
             db.add(post)
             db.commit()
-        sleep(3)
+        sleep(1)
     db.close()
     bot.send_message(THECATTEST, 'checked')
 
@@ -76,10 +80,10 @@ def send_post(post, images):
 
 def edit_post(post, images):
     if len(images) == 1:
-        bot.edit_message_caption(chat_id=M_CHANNEL, message_id=post.message_id,
+        bot.edit_message_caption(chat_id=CHANNEL, message_id=post.message_id,
                                  caption=post.get_text(), parse_mode=ParseMode.HTML)
     else:
-        bot.edit_message_text(chat_id=M_CHANNEL, message_id=post.message_id,
+        bot.edit_message_text(chat_id=CHANNEL, message_id=post.message_id,
                               text=post.get_text(), parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
@@ -96,7 +100,7 @@ def get_post(item):
     post = Post()
     post.title = item.title
     post.datetime = dt.fromtimestamp(mktime(item.published_parsed))
-    post.link = item.link
+    post.link = post.shorten_link(item.link)
     post.author = item.author_detail['name']
     post.text = text
 
