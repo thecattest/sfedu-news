@@ -46,7 +46,7 @@ class Post(SqlAlchemyBase, SerializerMixin):
 
     @staticmethod
     def shorten_link(link):
-        return search(r'.+-news/(.+/)?\d+', link).group()
+        return search(r'https://mmcs.sfedu.ru/(.+/)*\d{4,}', link).group()
 
     def __repr__(self):
         return f"<Post {self.id} {self.title} >"

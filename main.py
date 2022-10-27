@@ -25,6 +25,7 @@ TEST_CHANNEL = -1001885344884
 M_CHANNEL = -1001154887433
 
 CHANNEL = M_CHANNEL
+# CHANNEL = TEST_CHANNEL
 THECATTEST = 888848705
 bot = Bot(TOKEN)
 
@@ -39,6 +40,8 @@ def refresh():
         if db_post:
             keys = ('title', 'text', 'datetime')
             if db_post.to_dict(only=keys) != post.to_dict(keys):
+                print(db_post.to_dict())
+                print(post.to_dict())
                 print('delete and post')
                 bot.send_message(THECATTEST, 'delete and post')
                 delete_post(db_post)
@@ -50,6 +53,7 @@ def refresh():
                 db.commit()
         else:
             print('new')
+            print(post.to_dict())
             bot.send_message(THECATTEST, 'new')
             message = send_post(post, images)
             post.message_id = message.message_id
@@ -97,6 +101,7 @@ def get_post(item):
 
     post = Post()
     post.title = item.title
+    print(item.link)
     post.datetime = dt.fromtimestamp(mktime(item.published_parsed))
     post.link = post.shorten_link(item.link)
     post.author = item.author_detail['name']
