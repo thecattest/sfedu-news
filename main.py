@@ -44,7 +44,10 @@ def refresh():
                 print(post.to_dict())
                 print('delete and post')
                 bot.send_message(THECATTEST, 'delete and post')
-                delete_post(db_post)
+                try:
+                    delete_post(db_post)
+                except BadRequest as e:
+                    bot.send_message(THECATTEST, str(e))
                 db.delete(db_post)
                 db.commit()
                 message_id = send_post(post, images).message_id
