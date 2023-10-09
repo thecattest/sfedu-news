@@ -30,7 +30,7 @@ class Post(SqlAlchemyBase, SerializerMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    title = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False)
+    title = sqlalchemy.Column(sqlalchemy.String, unique=False, nullable=False)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     datetime = sqlalchemy.Column(sqlalchemy.DateTime, nullable=False)
     link = sqlalchemy.Column(sqlalchemy.String, nullable=False)
